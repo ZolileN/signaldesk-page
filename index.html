@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SignalDesk Africa — Media Intelligence & Creator Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #080C17;
+    --ink-2: #0D1320;
+    --ink-3: #111827;
+    --ink-4: #1A2235;
+    --gold: #8D7240;
+    --gold-light: #A68B58;
+    --gold-dim: rgba(141, 114, 64, 0.12);
+    --gold-dark: #6A5730;
+    --accent: #6A5730;
+    --accent-light: #8D7240;
+    --accent-dim: rgba(106, 87, 48, 0.12);
+    --cream: #E7E8EA;
+    --cream-2: #B0B7C3;
+    --muted: #6B748A;
+    --muted-2: #3F4659;
+    --border: rgba(255,255,255,0.07);
+    --border-2: rgba(255,255,255,0.12);
+    --r: 10px;
+    --r-lg: 18px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* ── CANVAS BACKGROUND ── */
+  #bg-canvas {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none; opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 68px;
+    background: rgba(9,9,15,0.75);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-mark {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 18px; height: 18px; }
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 17px;
+    letter-spacing: -0.3px;
+  }
+  .logo-text span { color: var(--gold); }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 14px; font-weight: 400; color: var(--cream-2);
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-cta {
+    display: flex; gap: 10px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 20px; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all .2s;
+    border: none;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--cream-2);
+    border: 1px solid var(--border-2);
+  }
+  .btn-ghost:hover { background: var(--ink-3); color: var(--cream); }
+  .btn-gold {
+    background: var(--gold);
+    color: #0D0900;
+    font-weight: 600;
+  }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-accent {
+    background: var(--accent);
+    color: var(--cream);
+    font-weight: 600;
+  }
+  .btn-accent:hover { background: var(--accent-light); transform: translateY(-1px); }
+  .btn-lg { padding: 14px 32px; font-size: 16px; border-radius: 10px; }
+  .btn-outline-gold {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+  }
+  .btn-outline-gold:hover { background: var(--gold-dim); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 5vw; }
+  section { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 140px 5vw 100px;
+    position: relative; overflow: hidden;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(240,165,0,0.25);
+    color: var(--gold-light);
+    font-size: 12px; font-weight: 500; letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 7px 16px; border-radius: 100px;
+    margin-bottom: 32px;
+    animation: fadeUp .6s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(.7); }
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 7vw, 86px);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 900px;
+    animation: fadeUp .7s .1s ease both;
+  }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero h1 .accent-word { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--cream-2); line-height: 1.6;
+    max-width: 580px; margin: 24px auto 48px;
+    animation: fadeUp .7s .2s ease both;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp .7s .3s ease both;
+  }
+  .hero-scroll {
+    margin-top: 80px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: fadeUp .7s .5s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollLine 2s ease infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    40% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    80% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MARQUEE STRIP ── */
+  .marquee-strip {
+    overflow: hidden; border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--ink-2); padding: 14px 0;
+  }
+  .marquee-inner {
+    display: flex; gap: 60px; width: max-content;
+    animation: marquee 28s linear infinite;
+  }
+  .marquee-inner span {
+    font-size: 13px; font-weight: 500; letter-spacing: .5px;
+    color: var(--muted); white-space: nowrap;
+  }
+  .marquee-inner span.hi { color: var(--gold); }
+  .marquee-inner span.t { color: var(--accent); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: 1.8px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .section-label::before {
+    content: ''; width: 20px; height: 1px; background: var(--muted);
+  }
+
+  /* ── TWO PLATFORMS ── */
+  .platforms {
+    padding: 120px 0;
+    background: var(--ink-2);
+  }
+  .platforms-intro { text-align: center; margin-bottom: 70px; }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 800; letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .section-title em { font-style: normal; }
+  .section-sub {
+    font-size: 17px; color: var(--cream-2); margin-top: 14px;
+    max-width: 520px; margin-left: auto; margin-right: auto;
+  }
+  .platform-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .platform-card {
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border-2);
+    padding: 48px 40px 44px;
+    position: relative; overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .platform-card:hover { transform: translateY(-4px); }
+  .platform-card.pro { background: var(--ink-3); }
+  .platform-card.pro:hover { border-color: rgba(240,165,0,0.4); }
+  .platform-card.creator { background: var(--ink-3); }
+  .platform-card.creator:hover { border-color: rgba(0,212,160,0.4); }
+  .card-glow {
+    position: absolute; top: -80px; right: -80px;
+    width: 280px; height: 280px; border-radius: 50%;
+    filter: blur(80px); opacity: .25; pointer-events: none;
+  }
+  .pro .card-glow { background: var(--gold); }
+  .creator .card-glow { background: var(--accent); }
+  .platform-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 6px;
+    margin-bottom: 24px;
+  }
+  .pro .platform-tag { background: var(--gold-dim); color: var(--gold-light); }
+  .creator .platform-tag { background: var(--accent-dim); color: var(--accent-light); }
+  .platform-domain {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; color: var(--muted); margin-bottom: 12px;
+  }
+  .platform-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800; line-height: 1.15;
+    letter-spacing: -.5px; margin-bottom: 14px;
+  }
+  .platform-card p { color: var(--cream-2); font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+  .feature-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px; color: var(--cream-2);
+  }
+  .feat-icon {
+    width: 18px; height: 18px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px; font-size: 10px;
+  }
+  .pro .feat-icon { background: var(--gold-dim); color: var(--gold); }
+  .creator .feat-icon { background: var(--accent-dim); color: var(--accent); }
+  .platform-price {
+    display: flex; align-items: baseline; gap: 6px; margin-bottom: 22px;
+  }
+  .price-from { font-size: 12px; color: var(--muted); }
+  .price-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px; font-weight: 800;
+  }
+  .pro .price-num { color: var(--gold); }
+  .creator .price-num { color: var(--accent); }
+  .price-unit { font-size: 13px; color: var(--muted); }
+
+  /* ── STATS BAND ── */
+  .stats-band {
+    padding: 80px 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  }
+  .stat-item {
+    text-align: center; padding: 0 24px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px; font-weight: 800; line-height: 1;
+    letter-spacing: -2px; margin-bottom: 8px;
+  }
+  .stat-num .u { font-size: 28px; opacity: .6; }
+  .stat-item:nth-child(1) .stat-num { color: var(--gold); }
+  .stat-item:nth-child(2) .stat-num { color: var(--accent); }
+  .stat-item:nth-child(3) .stat-num { color: var(--gold); }
+  .stat-item:nth-child(4) .stat-num { color: var(--accent); }
+  .stat-label { font-size: 13px; color: var(--muted); letter-spacing: .3px; }
+
+  /* ── HOW IT WORKS ── */
+  .how { padding: 120px 0; }
+  .how-grid {
+    display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start;
+  }
+  .how-left { position: sticky; top: 100px; }
+  .how-left h2 { margin-bottom: 20px; }
+  .how-left p { color: var(--cream-2); font-size: 16px; margin-bottom: 32px; }
+  .arch-visual {
+    background: var(--ink-3);
+    border: 1px solid var(--border-2);
+    border-radius: var(--r-lg);
+    padding: 28px 24px; font-family: 'DM Mono', monospace;
+    font-size: 12px; line-height: 1.8; color: var(--muted);
+  }
+  .arch-visual .c { color: var(--cream-2); }
+  .arch-visual .g { color: var(--gold); }
+  .arch-visual .t { color: var(--accent); }
+  .arch-visual .m { color: var(--muted-2); }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: 28px;
+    padding: 32px 0; border-bottom: 1px solid var(--border);
+    transition: opacity .3s;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 13px; letter-spacing: 1px;
+    color: var(--muted-2); min-width: 36px; margin-top: 3px;
+  }
+  .step-body h4 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 18px; margin-bottom: 8px; letter-spacing: -.2px;
+  }
+  .step-body p { font-size: 14px; color: var(--cream-2); line-height: 1.6; }
+  .step-chip {
+    display: inline-block; margin-top: 10px;
+    font-size: 11px; font-weight: 500; letter-spacing: .8px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 5px;
+  }
+  .chip-gold { background: var(--gold-dim); color: var(--gold-light); }
+  .chip-accent { background: var(--accent-dim); color: var(--accent-light); }
+  .chip-both {
+    background: linear-gradient(90deg, var(--gold-dim), var(--accent-dim));
+    color: var(--cream-2);
+  }
+
+  /* ── PRICING ── */
+  .pricing { padding: 120px 0; background: var(--ink-2); }
+  .pricing-tabs {
+    display: flex; gap: 8px; margin: 40px auto 56px;
+    background: var(--ink-3);
+    border: 1px solid var(--border-2);
+    border-radius: 12px; padding: 6px; width: fit-content;
+  }
+  .ptab {
+    padding: 10px 24px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: all .2s; color: var(--muted); border: none;
+    background: transparent;
+  }
+  .ptab.active-gold { background: var(--gold); color: #0D0900; font-weight: 600; }
+  .ptab.active-accent { background: var(--accent); color: #001A12; font-weight: 600; }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .price-card {
+    background: var(--ink-3); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 36px 28px;
+    transition: all .3s; position: relative; overflow: hidden;
+  }
+  .price-card:hover { transform: translateY(-3px); border-color: var(--border-2); }
+  .price-card.featured-gold {
+    border-color: rgba(240,165,0,0.4);
+    background: linear-gradient(160deg, rgba(240,165,0,0.06) 0%, var(--ink-3) 60%);
+  }
+  .price-card.featured-accent {
+    border-color: rgba(0,212,160,0.4);
+    background: linear-gradient(160deg, rgba(0,212,160,0.06) 0%, var(--ink-3) 60%);
+  }
+  .popular-badge {
+    position: absolute; top: 20px; right: 20px;
+    font-size: 10px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 5px;
+  }
+  .badge-gold { background: var(--gold-dim); color: var(--gold-light); }
+  .badge-accent { background: var(--accent-dim); color: var(--accent-light); }
+  .price-plan { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 16px; }
+  .price-amount { display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px; }
+  .price-big { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -2px; }
+  .price-card.featured-gold .price-big { color: var(--gold); }
+  .price-card.featured-accent .price-big { color: var(--accent); }
+  .price-mo { font-size: 13px; color: var(--muted); }
+  .price-desc { font-size: 14px; color: var(--cream-2); margin-bottom: 28px; line-height: 1.5; }
+  .price-divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+  .price-features li { display: flex; gap: 9px; font-size: 13px; color: var(--cream-2); align-items: flex-start; }
+  .pf-icon { margin-top: 2px; font-size: 14px; }
+  .pf-gold { color: var(--gold); }
+  .pf-accent { color: var(--accent); }
+
+  /* ── MARKET ── */
+  .market { padding: 120px 0; }
+  .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .market-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mcard {
+    background: var(--ink-3); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 24px 20px;
+    transition: all .3s;
+  }
+  .mcard:hover { border-color: var(--border-2); transform: translateY(-2px); }
+  .mcard-num {
+    font-family: 'Syne', sans-serif; font-size: 32px;
+    font-weight: 800; letter-spacing: -1px; line-height: 1;
+    margin-bottom: 6px;
+  }
+  .mcard:nth-child(1) .mcard-num, .mcard:nth-child(3) .mcard-num { color: var(--gold); }
+  .mcard:nth-child(2) .mcard-num, .mcard:nth-child(4) .mcard-num { color: var(--accent); }
+  .mcard-label { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .mcard.span-2 { grid-column: span 2; display: flex; align-items: center; gap: 20px; }
+  .mcard.span-2 .mcard-num { font-size: 40px; }
+  .market-text h2 { margin-bottom: 18px; }
+  .market-text p { color: var(--cream-2); font-size: 16px; line-height: 1.7; margin-bottom: 16px; }
+  .competitor-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .competitor-row:last-child { border-bottom: none; }
+  .comp-name { flex: 1; font-weight: 500; }
+  .comp-tag { font-size: 11px; color: var(--muted); background: var(--ink-3); border-radius: 4px; padding: 3px 8px; }
+  .comp-weakness { font-size: 12px; color: var(--muted); flex: 2; }
+  .comp-win {
+    font-size: 11px; color: var(--accent-light);
+    background: var(--accent-dim); border-radius: 4px; padding: 3px 8px;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    padding: 120px 0; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 400px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(240,165,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 { margin-bottom: 20px; }
+  .cta-section p { color: var(--cream-2); font-size: 18px; max-width: 480px; margin: 0 auto 48px; }
+  .cta-double {
+    display: flex; gap: 48px; justify-content: center; align-items: stretch;
+    flex-wrap: wrap;
+  }
+  .cta-card {
+    background: var(--ink-3); border: 1px solid var(--border-2);
+    border-radius: var(--r-lg); padding: 36px 36px 32px;
+    width: 300px; text-align: left;
+    transition: all .3s;
+  }
+  .cta-card:hover { transform: translateY(-4px); }
+  .cta-card.cta-pro:hover { border-color: rgba(240,165,0,.4); }
+  .cta-card.cta-cre:hover { border-color: rgba(0,212,160,.4); }
+  .cta-card h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+  .cta-card p { font-size: 14px; color: var(--cream-2); margin-bottom: 24px; line-height: 1.55; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink-2);
+    border-top: 1px solid var(--border);
+    padding: 60px 5vw 36px;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px; padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 14px 0 20px; max-width: 280px; }
+  .footer-location {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+  }
+  .loc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+  .footer-col h5 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 13px; color: var(--muted); margin-bottom: 10px; transition: color .2s; }
+  .footer-col a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 28px; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 12px; color: var(--muted); }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { font-size: 12px; color: var(--muted); transition: color .2s; }
+  .footer-legal a:hover { color: var(--cream); }
+
+  /* ── SUBSCRIBE SECTION ── */
+  .subscribe { padding: 120px 0 60px; }
+  .sub-card {
+    background: var(--ink-2);
+    border: 1px solid var(--border-2);
+    border-radius: 24px;
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .sub-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; height: 200px;
+    background: radial-gradient(circle, rgba(141, 114, 64, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .sub-card h2 { margin-bottom: 16px; }
+  .sub-card p { color: var(--cream-2); margin-bottom: 40px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .sub-form {
+    display: flex; gap: 12px; max-width: 500px; margin: 0 auto 20px;
+    background: rgba(255,255,255,0.03);
+    padding: 8px; border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .sub-form input {
+    flex: 1; background: transparent; border: none;
+    padding: 0 16px; color: var(--cream);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+  }
+  .sub-form input:focus { outline: none; }
+  .sub-note { font-size: 12px !important; color: var(--muted) !important; margin-bottom: 0 !important; }
+
+  /* ── HIDDEN PLATFORM PANELS ── */
+  .pricing-panel { display: none; }
+  .pricing-panel.active { display: block; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 860px) {
+    .platform-grid, .how-grid, .market-grid, .pricing-grid, .stats-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .cta-double { flex-direction: column; align-items: center; }
+    .how-left { position: static; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 24px; }
+    .stat-item:last-child { border-bottom: none; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E7E8EA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="m5 3 1 1"/><path d="m19 3-1 1"/><path d="m5 21 1-1"/><path d="m19 21-1-1"/></svg>
+    </div>
+    <div class="logo-text">Signal<span>Desk</span> Africa</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#market">Market</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn btn-ghost">Sign in</button>
+    <button class="btn btn-gold">Start free trial</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    Launching · Cape Town, South Africa
+  </div>
+  <h1>Africa's <em>media intelligence</em> &<br><span class="accent-word">creator platform</span></h1>
+  <p class="hero-sub">Two products. One powerful backend. Built for South African PR teams, agencies, and independent creators who need real intelligence — not global tools with no local context.</p>
+  <div class="hero-ctas">
+    <button class="btn btn-gold btn-lg">Explore SignalDesk Pro ↗</button>
+    <button class="btn btn-accent btn-lg">Creator Platform →</button>
+    <button class="btn btn-ghost btn-lg">Watch demo</button>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="hi">SA Brand Monitoring</span>
+    <span>·</span>
+    <span class="t">Facebook Bonus Planner</span>
+    <span>·</span>
+    <span>Sentiment Analysis</span>
+    <span>·</span>
+    <span class="hi">AI Analyst Reports</span>
+    <span>·</span>
+    <span class="t">Creator Monetisation</span>
+    <span>·</span>
+    <span>SA Trend Intelligence</span>
+    <span>·</span>
+    <span class="hi">PR Agency Tools</span>
+    <span>·</span>
+    <span class="t">WhatsApp Alerts</span>
+    <span>·</span>
+    <span>POPIA Compliant</span>
+    <span>·</span>
+    <span class="hi">ZAR Pricing</span>
+    <span>·</span>
+    <span class="t">Rights-Safe Audio</span>
+    <span>·</span>
+    <span>SME Marketing</span>
+    <span>·</span>
+    <!-- duplicate for seamless loop -->
+    <span class="hi">SA Brand Monitoring</span>
+    <span>·</span>
+    <span class="t">Facebook Bonus Planner</span>
+    <span>·</span>
+    <span>Sentiment Analysis</span>
+    <span>·</span>
+    <span class="hi">AI Analyst Reports</span>
+    <span>·</span>
+    <span class="t">Creator Monetisation</span>
+    <span>·</span>
+    <span>SA Trend Intelligence</span>
+    <span>·</span>
+    <span class="hi">PR Agency Tools</span>
+    <span>·</span>
+    <span class="t">WhatsApp Alerts</span>
+    <span>·</span>
+    <span>POPIA Compliant</span>
+    <span>·</span>
+    <span class="hi">ZAR Pricing</span>
+    <span>·</span>
+    <span class="t">Rights-Safe Audio</span>
+    <span>·</span>
+    <span>SME Marketing</span>
+    <span>·</span>
+  </div>
+</div>
+
+<!-- PLATFORMS -->
+<section class="platforms" id="platforms">
+  <div class="container">
+    <div class="platforms-intro reveal">
+      <div class="section-label">Two Products</div>
+      <h2 class="section-title">One platform. <em style="color:var(--gold)">Two audiences.</em><br>Infinite intelligence.</h2>
+      <p class="section-sub">A single shared backend feeds two distinct front-end products — each built for a completely different user, but powered by the same living data layer.</p>
+    </div>
+    <div class="platform-grid reveal">
+
+      <!-- PRO CARD -->
+      <div class="platform-card pro">
+        <div class="card-glow"></div>
+        <div class="platform-tag">
+          <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
+          Media Intelligence
+        </div>
+        <div class="platform-domain">signaldesk.africa</div>
+        <h3>Know your brand.<br>Own the narrative.</h3>
+        <p>Real-time brand monitoring, SA media coverage tracking, sentiment analysis, and AI-generated analyst reports — purpose-built for PR agencies, communications teams, and SA corporates.</p>
+        <ul class="feature-list">
+          <li><div class="feat-icon">✦</div>Live mention tracking across Facebook, X, Instagram, TikTok & SA news</li>
+          <li><div class="feat-icon">✦</div>AI-generated weekly brand health reports — export to PDF, Word, Slides</li>
+          <li><div class="feat-icon">✦</div>Crisis detection with WhatsApp priority alerts</li>
+          <li><div class="feat-icon">✦</div>Share of voice vs. up to 5 competitors</li>
+          <li><div class="feat-icon">✦</div>SA journalist & publication database with reach estimates</li>
+          <li><div class="feat-icon">✦</div>Geographic filtering: WC, GP, KZN, EC, National</li>
+        </ul>
+        <div class="platform-price">
+          <span class="price-from">from</span>
+          <span class="price-num">R499</span>
+          <span class="price-unit">/month</span>
+        </div>
+        <button class="btn btn-gold btn-lg" style="width:100%">Start free trial →</button>
+      </div>
+
+      <!-- CREATOR CARD -->
+      <div class="platform-card creator">
+        <div class="card-glow"></div>
+        <div class="platform-tag">
+          <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
+          Creator Monetisation
+        </div>
+        <div class="platform-domain">create.signaldesk.africa</div>
+        <h3>Post smarter.<br>Earn more. Every week.</h3>
+        <p>An AI-powered mobile monetisation assistant for South African Facebook creators. Get personalised plans to hit your Facebook Extra Bonus milestones — in under 3 minutes.</p>
+        <ul class="feature-list">
+          <li><div class="feat-icon">✦</div>Live SA + global trend feed with Money Score & SA Relevance Score</li>
+          <li><div class="feat-icon">✦</div>Facebook Extra Bonus attack planner — post-by-post briefs with exact hooks</li>
+          <li><div class="feat-icon">✦</div>Global trend SA arrival predictions — be first-mover in your niche</li>
+          <li><div class="feat-icon">✦</div>Rights-safe audio recommendations from Meta Sound Collection</li>
+          <li><div class="feat-icon">✦</div>Earnings log with weekly performance baseline</li>
+          <li><div class="feat-icon">✦</div>WhatsApp deadline reminders (Creator Pro)</li>
+        </ul>
+        <div class="platform-price">
+          <span class="price-from">from</span>
+          <span class="price-num">R0</span>
+          <span class="price-unit">forever free</span>
+        </div>
+        <button class="btn btn-accent btn-lg" style="width:100%">Join as a creator →</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-band">
+  <div class="container">
+    <div class="stats-grid reveal">
+      <div class="stat-item">
+        <div class="stat-num">800<span class="u">K+</span></div>
+        <div class="stat-label">Active SA Facebook creators</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1,200<span class="u">+</span></div>
+        <div class="stat-label">SA PR agencies addressable</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2.5<span class="u">M+</span></div>
+        <div class="stat-label">SA mentions indexed monthly</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2,500<span class="u">+</span></div>
+        <div class="stat-label">SA news & social sources tracked</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="how-grid">
+      <div class="how-left reveal">
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title" style="font-size:clamp(26px,3.5vw,38px)">Two products.<br>One living<br><em style="color:var(--accent)">data layer.</em></h2>
+        <p>The competitive moat is the shared backend — a continuously-updated intelligence pipeline that makes both products richer than any standalone alternative.</p>
+        <div class="arch-visual">
+<span class="g">signaldesk.africa</span>   <span class="t">create.signaldesk.africa</span><br>
+          <span class="m">─────────────────────────────────</span><br>
+          <span class="c">   High-Speed Intelligence Engine</span><br>
+          <span class="c">     Distributed Cloud Workers</span><br>
+          <span class="m">─────────────────────────────────</span><br>
+          <span class="g">X  ·  TikTok  ·  Instagram</span><br>
+          <span class="t">Facebook  ·  SA News  ·  Global</span>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h4>Real-time data ingestion runs 24/7</h4>
+            <p>Automated cloud workers continuously monitor X, TikTok, Instagram, Facebook, and SA news cycles. Fresh signals are captured and indexed every 15 minutes, with every data point filtered for South African relevance in real-time.</p>
+            <span class="step-chip chip-both">Both Platforms</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h4>Local context &amp; sentiment analysis</h4>
+            <p>Our proprietary linguistic engine automatically identifies South African brands, politicians, and public figures in every mention. Custom-trained models then analyze the sentiment and tone, ensuring that local nuance is never lost in global data.</p>
+            <span class="step-chip chip-gold">SignalDesk Pro</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h4>AI generates actionable intelligence</h4>
+            <p>LLM generates analyst reports for PR teams and personalised bonus attack plans for creators. Every output references SAST posting times, ZAR pricing, and SA audience behaviour — never generic global advice.</p>
+            <span class="step-chip chip-both">Both Platforms</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h4>Alerts reach you where you work</h4>
+            <p>Brand crisis alerts, creator deadline reminders, and weekly digests are delivered via WhatsApp Business API, email, and in-app — no dashboard-checking required for the intelligence that matters most.</p>
+            <span class="step-chip chip-accent">Creator Platform</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">SA pricing.<br><em style="color:var(--gold)">Not US assumptions.</em></h2>
+      <p class="section-sub">Every plan is priced for the South African market. No surprise USD billing. Cancel anytime.</p>
+    </div>
+
+    <div class="pricing-tabs reveal" style="margin-left:auto; margin-right:auto;">
+      <button class="ptab active-gold" onclick="switchPricing('pro',this)">SignalDesk Pro</button>
+      <button class="ptab" onclick="switchPricing('creator',this)">Creator Platform</button>
+    </div>
+
+    <!-- PRO PLANS -->
+    <div id="panel-pro" class="pricing-panel active reveal">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-plan">Starter</div>
+          <div class="price-amount"><span class="price-big" style="color:var(--cream)">R499</span><span class="price-mo">/mo</span></div>
+          <p class="price-desc">Perfect for solo PR consultants and small SMEs just getting started with brand monitoring.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="pf-icon pf-gold">✓</span> 2 brands monitored</li>
+            <li><span class="pf-icon pf-gold">✓</span> 7-day history</li>
+            <li><span class="pf-icon pf-gold">✓</span> 3 users</li>
+            <li><span class="pf-icon pf-gold">✓</span> Basic email alerts</li>
+            <li><span class="pf-icon" style="color:var(--muted)">✗</span> <span style="color:var(--muted)">AI reports</span></li>
+          </ul>
+          <button class="btn btn-outline-gold" style="width:100%;justify-content:center">Get started</button>
+        </div>
+        <div class="price-card featured-gold">
+          <div class="popular-badge badge-gold">Most popular</div>
+          <div class="price-plan">Professional</div>
+          <div class="price-amount"><span class="price-big">R1,499</span><span class="price-mo">/mo</span></div>
+          <p class="price-desc">The full SA intelligence stack for active PR agencies and SME marketing teams.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="pf-icon pf-gold">✓</span> 10 brands monitored</li>
+            <li><span class="pf-icon pf-gold">✓</span> 90-day history</li>
+            <li><span class="pf-icon pf-gold">✓</span> 10 users</li>
+            <li><span class="pf-icon pf-gold">✓</span> AI analyst reports</li>
+            <li><span class="pf-icon pf-gold">✓</span> WhatsApp alerts</li>
+          </ul>
+          <button class="btn btn-gold" style="width:100%;justify-content:center">Start free trial</button>
+        </div>
+        <div class="price-card">
+          <div class="price-plan">Agency</div>
+          <div class="price-amount"><span class="price-big" style="color:var(--cream)">R3,999</span><span class="price-mo">/mo</span></div>
+          <p class="price-desc">For multi-client PR agencies that need unlimited monitoring and white-label reporting.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="pf-icon pf-gold">✓</span> Up to 50 brands monitored</li>
+            <li><span class="pf-icon pf-gold">✓</span> 12-month history</li>
+            <li><span class="pf-icon pf-gold">✓</span> Unlimited users</li>
+            <li><span class="pf-icon pf-gold">✓</span> White-label PDF reports</li>
+            <li><span class="pf-icon pf-gold">✓</span> Crisis management module</li>
+          </ul>
+          <button class="btn btn-outline-gold" style="width:100%;justify-content:center">Contact sales</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREATOR PLANS -->
+    <div id="panel-creator" class="pricing-panel">
+      <div class="pricing-grid reveal">
+        <div class="price-card">
+          <div class="price-plan">Free</div>
+          <div class="price-amount"><span class="price-big" style="color:var(--cream)">R0</span><span class="price-mo">/forever</span></div>
+          <p class="price-desc">New creators testing the platform. Start building your bonus strategy today.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="pf-icon pf-accent">✓</span> 2 bonus plans per month</li>
+            <li><span class="pf-icon pf-accent">✓</span> Basic SA trend feed</li>
+            <li><span class="pf-icon pf-accent">✓</span> 7-day history</li>
+            <li><span class="pf-icon" style="color:var(--muted)">✗</span> <span style="color:var(--muted)">Global trends</span></li>
+            <li><span class="pf-icon" style="color:var(--muted)">✗</span> <span style="color:var(--muted)">Earnings log</span></li>
+          </ul>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;border-color:var(--accent);color:var(--accent)">Join free</button>
+        </div>
+        <div class="price-card featured-accent">
+          <div class="popular-badge badge-accent">Best value</div>
+          <div class="price-plan">Creator</div>
+          <div class="price-amount"><span class="price-big">R99</span><span class="price-mo">/mo</span></div>
+          <p class="price-desc">For active creators earning from Facebook who want to maximise every bonus cycle.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="pf-icon pf-accent">✓</span> Unlimited bonus plans</li>
+            <li><span class="pf-icon pf-accent">✓</span> SA + Africa + Global trends</li>
+            <li><span class="pf-icon pf-accent">✓</span> SA Arrival Predictions</li>
+            <li><span class="pf-icon pf-accent">✓</span> Earnings log</li>
+            <li><span class="pf-icon pf-accent">✓</span> Rights-safe audio picks</li>
+          </ul>
+          <button class="btn btn-accent" style="width:100%;justify-content:center">Start creating</button>
+        </div>
+        <div class="price-card">
+          <div class="price-plan">Creator Pro</div>
+          <div class="price-amount"><span class="price-big" style="color:var(--cream)">R249</span><span class="price-mo">/mo</span></div>
+          <p class="price-desc">Creators targeting brand deals and serious about scaling their Facebook income.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="pf-icon pf-accent">✓</span> Everything in Creator</li>
+            <li><span class="pf-icon pf-accent">✓</span> Brand deal matching</li>
+            <li><span class="pf-icon pf-accent">✓</span> WhatsApp deadline reminders</li>
+            <li><span class="pf-icon pf-accent">✓</span> Priority AI analysis</li>
+            <li><span class="pf-icon pf-accent">✓</span> R1,999/year (save 2 months)</li>
+          </ul>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;border-color:var(--accent);color:var(--accent)">Go Pro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section class="market" id="market">
+  <div class="container">
+    <div class="market-grid">
+      <div class="market-text reveal">
+        <div class="section-label">Market Opportunity</div>
+        <h2 class="section-title" style="font-size:clamp(26px,3.5vw,38px)">SA-first.<br><em style="color:var(--gold)">No one has</em><br>built this yet.</h2>
+        <p>Every major media intelligence tool — Meltwater, Talkwalker, Brandwatch — is built for global markets with US-centric trend data and EUR/USD pricing. SignalDesk Africa is the first platform built from the ground up for South Africa.</p>
+        <p>No SA-native competitor exists in either category we're entering.</p>
+        <div style="margin-top:28px;">
+          <div class="competitor-row">
+            <span class="comp-name">Meltwater</span>
+            <span class="comp-tag">Global</span>
+            <span class="comp-weakness">R10K+/mo · No SA creator features</span>
+            <span class="comp-win">We win</span>
+          </div>
+          <div class="competitor-row">
+            <span class="comp-name">Brandwatch</span>
+            <span class="comp-tag">Global</span>
+            <span class="comp-weakness">No creator module · USD pricing</span>
+            <span class="comp-win">We win</span>
+          </div>
+          <div class="competitor-row">
+            <span class="comp-name">Buffer / Later</span>
+            <span class="comp-tag">Global</span>
+            <span class="comp-weakness">Scheduling only · No SA trends</span>
+            <span class="comp-win">We win</span>
+          </div>
+          <div class="competitor-row">
+            <span class="comp-name">SA-native tool</span>
+            <span class="comp-tag">—</span>
+            <span class="comp-weakness">Doesn't exist</span>
+            <span class="comp-win" style="background:var(--gold-dim);color:var(--gold-light);">Blue ocean</span>
+          </div>
+        </div>
+      </div>
+      <div class="market-visual reveal">
+        <div class="mcard">
+          <div class="mcard-num">800K<span style="font-size:18px">+</span></div>
+          <div class="mcard-label">Active SA Facebook creators with monetisation intent</div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-num">1,200</div>
+          <div class="mcard-label">Registered SA PR agencies needing monitoring tools</div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-num">45K</div>
+          <div class="mcard-label">SA SME marketing teams with digital budget</div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-num">&lt; 15m</div>
+          <div class="mcard-label">Average time to detect and alert on new brand mentions</div>
+        </div>
+        <div class="mcard span-2">
+          <div>
+            <div class="mcard-num">100%</div>
+            <div class="mcard-label">POPIA Compliant &amp; ZAR Native</div>
+          </div>
+          <div style="flex:1; padding-left:20px; border-left:1px solid var(--border);">
+            <div style="font-size:13px; color:var(--cream-2); line-height:1.6;">Built on South African soil for local privacy laws. No international currency fluctuations—just <strong style="color:var(--gold)">predictable ZAR pricing</strong> that fits local budgets.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center; margin-bottom:20px">Get started today</div>
+      <h2 class="section-title" style="font-size:clamp(32px,5vw,56px)">Ready to own your<br><em style="color:var(--gold)">signal?</em></h2>
+      <p>Join South African PR teams and creators who are taking back control of their media intelligence and earnings — with tools built for them.</p>
+    </div>
+    <div class="cta-double reveal" style="margin-top:48px;">
+      <div class="cta-card cta-pro">
+        <div class="platform-tag" style="background:var(--gold-dim); color:var(--gold-light); margin-bottom:16px;">SignalDesk Pro</div>
+        <h3>For PR & Communications</h3>
+        <p>Real-time SA brand monitoring, AI analyst reports, and crisis detection. 14-day free trial — no credit card required.</p>
+        <button class="btn btn-gold btn-lg" style="width:100%; justify-content:center">Start free trial →</button>
+        <p style="font-size:12px; color:var(--muted); margin-top:10px; text-align:center;">From R299/month · Cancel anytime</p>
+      </div>
+      <div class="cta-card cta-cre">
+        <div class="platform-tag" style="background:var(--accent-dim); color:var(--accent-light); margin-bottom:16px;">Creator Platform</div>
+        <h3>For SA Content Creators</h3>
+        <p>Hit your Facebook bonus milestones with AI-powered content plans, live trend intelligence, and earnings tracking.</p>
+        <button class="btn btn-accent btn-lg" style="width:100%; justify-content:center">Join for free →</button>
+        <p style="font-size:12px; color:var(--muted); margin-top:10px; text-align:center;">Free forever · Upgrade when ready</p>
+      </div>
+    </div>
+    <div class="popia-badge reveal" style="margin:40px auto 0; width:fit-content;">
+      <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 1L2 3v3c0 2.5 1.7 4.8 4 5.4 2.3-.6 4-2.9 4-5.4V3L6 1z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+      POPIA Compliant · Data stored in SA/EU · No data sold to third parties
+    </div>
+  </div>
+</section>
+
+  <!-- SUBSCRIBE -->
+  <section class="subscribe">
+    <div class="container">
+      <div class="sub-card reveal">
+        <div class="sub-glow"></div>
+        <div class="section-label">Waitlist</div>
+        <h2 class="section-title">Be the first to know<br>when we launch.</h2>
+        <p>Join 500+ South African creators and PR professionals getting early access to the intelligence platform.</p>
+        
+        <form class="sub-form" action="https://formsubmit.co/hi@mlkcomputer.com" method="POST">
+          <input type="text" name="_honey" style="display:none">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_subject" value="New Waitlist Lead: SignalDesk Africa">
+          <input type="email" name="email" placeholder="Enter your email address" required>
+          <button type="submit" class="btn btn-gold">Join the Waitlist</button>
+        </form>
+        <p class="sub-note">Secure your spot and get an exclusive launch discount. No spam, ever.</p>
+      </div>
+    </div>
+  </section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D0900" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="m5 3 1 1"/><path d="m19 3-1 1"/><path d="m5 21 1-1"/><path d="m19 21-1-1"/></svg>
+        </div>
+        <div class="logo-text">Signal<span>Desk</span> Africa</div>
+      </div>
+      <p>Africa's definitive media intelligence and creator monetisation platform. Built in Cape Town for the South African market.</p>
+      <div class="footer-location">
+        <div class="loc-dot"></div>
+        Cape Town, South Africa
+      </div>
+      <div class="popia-badge" style="margin-top:14px;">POPIA Compliant</div>
+    </div>
+    <div class="footer-col">
+      <h5>SignalDesk Pro</h5>
+      <a href="#">Brand Monitoring</a>
+      <a href="#">Sentiment Analysis</a>
+      <a href="#">AI Analyst Reports</a>
+      <a href="#">Crisis Detection</a>
+      <a href="#">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Creator Platform</h5>
+      <a href="#">Trend Intelligence</a>
+      <a href="#">Bonus Planner</a>
+      <a href="#">Global Trends</a>
+      <a href="#">Earnings Log</a>
+      <a href="#">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+      <a href="mailto:hi@signaldesk.africa">hi@signaldesk.africa</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="currentYear"></span> <a href="https://mlkcomputer.com" style="color: var(--gold); text-decoration: none;">MLK Computer Consulting</a> · SignalDesk Africa. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">POPIA Notice</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Animated signal particle canvas
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const N = 60;
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  for(let i=0;i<N;i++){
+    particles.push({
+      x: Math.random()*window.innerWidth,
+      y: Math.random()*window.innerHeight,
+      vx: (Math.random()-.5)*.3,
+      vy: (Math.random()-.5)*.3,
+      r: Math.random()*1.8+.4,
+      gold: Math.random()>.5
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = p.gold ? '#F0A500' : '#00D4A0';
+      ctx.fill();
+    });
+    particles.forEach((a,i)=>{
+      particles.slice(i+1).forEach(b=>{
+        const dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<120){
+          ctx.beginPath();
+          ctx.strokeStyle = a.gold ? `rgba(240,165,0,${.15*(1-d/120)})` : `rgba(0,212,160,${.12*(1-d/120)})`;
+          ctx.lineWidth=.5;
+          ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+},{threshold:.12});
+reveals.forEach(r=>io.observe(r));
+
+// Set current year
+document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+// Pricing tabs
+function switchPricing(panel, btn){
+  document.querySelectorAll('.pricing-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>{ b.classList.remove('active-gold','active-accent'); });
+  document.getElementById('panel-'+panel).classList.add('active');
+  btn.classList.add(panel==='pro'?'active-gold':'active-accent');
+}
+</script>
+</body>
+</html>
