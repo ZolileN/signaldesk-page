@@ -62,4 +62,85 @@ function switchPricing(panel, btn){
   const target = document.getElementById('panel-'+panel);
   if(target) target.classList.add('active');
   if(btn) btn.classList.add(panel==='pro'?'active-gold':'active-accent');
+  if(window.posthog) posthog.capture('pricing_tab_switched', { tab: panel });
 }
+
+// PostHog event tracking
+(function(){
+  // Nav buttons
+  var navCta = document.querySelector('.nav-cta');
+  if(navCta){
+    var navSignin = navCta.querySelector('.btn-ghost');
+    var navTrial = navCta.querySelector('.btn-gold');
+    if(navSignin) navSignin.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('nav_signin_clicked');
+    });
+    if(navTrial) navTrial.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('nav_trial_clicked');
+    });
+  }
+
+  // Hero CTA buttons
+  var heroCtas = document.querySelector('.hero-ctas');
+  if(heroCtas){
+    heroCtas.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(window.posthog) posthog.capture('hero_cta_clicked', { button_text: btn.textContent.trim() });
+      });
+    });
+  }
+
+  // Platform card CTA buttons
+  var proCard = document.querySelector('.platform-card.pro');
+  if(proCard){
+    var proBtn = proCard.querySelector('button');
+    if(proBtn) proBtn.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('platform_cta_clicked', { platform: 'pro', button_text: proBtn.textContent.trim() });
+    });
+  }
+  var creatorCard = document.querySelector('.platform-card.creator');
+  if(creatorCard){
+    var creatorBtn = creatorCard.querySelector('button');
+    if(creatorBtn) creatorBtn.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('platform_cta_clicked', { platform: 'creator', button_text: creatorBtn.textContent.trim() });
+    });
+  }
+
+  // Pricing plan buttons
+  var pricingPanels = document.querySelectorAll('.pricing-panel');
+  pricingPanels.forEach(function(panel){
+    var panelId = panel.id === 'panel-pro' ? 'pro' : 'creator';
+    panel.querySelectorAll('.price-card button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var planEl = btn.closest('.price-card').querySelector('.price-plan');
+        var plan = planEl ? planEl.textContent.trim() : '';
+        if(window.posthog) posthog.capture('pricing_plan_selected', {
+          platform: panelId,
+          plan: plan,
+          button_text: btn.textContent.trim()
+        });
+      });
+    });
+  });
+
+  // Bottom CTA section buttons
+  var ctaDouble = document.querySelector('.cta-double');
+  if(ctaDouble){
+    var ctaProBtn = ctaDouble.querySelector('.cta-pro button');
+    var ctaCreBtn = ctaDouble.querySelector('.cta-cre button');
+    if(ctaProBtn) ctaProBtn.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('cta_section_clicked', { platform: 'pro', button_text: ctaProBtn.textContent.trim() });
+    });
+    if(ctaCreBtn) ctaCreBtn.addEventListener('click', function(){
+      if(window.posthog) posthog.capture('cta_section_clicked', { platform: 'creator', button_text: ctaCreBtn.textContent.trim() });
+    });
+  }
+
+  // Waitlist form submission
+  var subForm = document.querySelector('.sub-form');
+  if(subForm){
+    subForm.addEventListener('submit', function(){
+      if(window.posthog) posthog.capture('waitlist_form_submitted');
+    });
+  }
+})();
